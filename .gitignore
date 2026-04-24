@@ -1,0 +1,36 @@
+.vault/.obsidian
+
+2. Firmware/.pio
+2. Firmware/.vscode/.browse.c_cpp.db*
+2. Firmware/.vscode/c_cpp_properties.json
+2. Firmware/.vscode/launch.json
+2. Firmware/.vscode/ipch
+
+3. Software/biasco_ws/log
+3. Software/biasco_ws/build
+3. Software/biasco_ws/install
+
+# Logs
+docs/logs
+docs/*.log
+docs/npm-debug.log*
+docs/yarn-debug.log*
+docs/yarn-error.log*
+docs/pnpm-debug.log*
+docs/lerna-debug.log*
+
+docs/node_modules
+docs/dist
+docs/dist-ssr
+docs/*.local
+
+# Editor directories and files
+docs/.vscode/*
+docs/!.vscode/extensions.json
+docs/.idea
+docs/.DS_Store
+docs/*.suo
+docs/*.ntvs*
+docs/*.njsproj
+docs/*.sln
+docs/*.sw?
