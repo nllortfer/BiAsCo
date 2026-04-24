@@ -3,6 +3,11 @@ name: Deploy Vite Project from docs folder
 on:
   push:
     branches: ['main']
+    # El flujo solo se activará si cambias algo dentro de la carpeta docs
+    paths:
+      - 'docs/**'
+      - '.github/workflows/deploy.yml' 
+
   workflow_dispatch:
 
 permissions:
