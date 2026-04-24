@@ -1,6 +1,11 @@
 name: Deploy Vite Project from docs folder
 
 on:
+  push:
+    paths:
+      - 'docs/**'
+      - '.github/workflows/deploy.yml' 
+
   workflow_dispatch:
 
 permissions:
