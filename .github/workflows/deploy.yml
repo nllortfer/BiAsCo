@@ -1,0 +1,58 @@
+name: Deploy Vite Project from docs folder
+
+on:
+  push:
+    branches: ['main']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: 'pages'
+  cancel-in-progress: true
+
+jobs:
+  build-and-deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+          # Importante: le decimos dónde está el package-lock.json
+          cache-dependency-path: './docs/package-lock.json' 
+
+      - name: Install dependencies
+        # Entramos en docs antes de instalar
+        run: npm ci
+        working-directory: ./docs 
+
+      - name: Build
+        # Entramos en docs antes de compilar
+        run: npm run build
+        working-directory: ./docs 
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          # Subimos la carpeta dist que se genera DENTRO de docs
+          # (OJO: si en vite.config pusiste outDir: 'docs', aquí sería ./docs/docs)
+          # Mi consejo: En vite.config de subcarpeta 'docs', deja el outDir por defecto (dist)
+          path: './docs/dist' 
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
