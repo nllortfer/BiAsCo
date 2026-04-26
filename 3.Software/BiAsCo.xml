@@ -1,0 +1,128 @@
+<mujoco model="biasco_v2_bimanual_ros2">
+
+  <compiler angle="degree" inertiafromgeom="true" />
+  <option timestep="0.002" gravity="0 0 -9.81" />
+
+  <default>
+    <geom contype="0" conaffinity="0" />
+    <joint limited="true" />
+  </default>
+
+  <asset>
+    <material name="m_link" rgba="0.83 0.83 0.90 1.0" specular="0.65" shininess="0.45" reflectance="0.05" />
+    <material name="m_joint" rgba="0.10 0.10 0.12 1.0" specular="0.85" shininess="0.70" />
+    <material name="m_support" rgba="0.18 0.18 0.22 1.0" specular="0.55" shininess="0.35" reflectance="0.10" />
+    <material name="m_ee" rgba="0.95 0.45 0.05 1.0" specular="0.50" shininess="0.30" />
+    <material name="m_floor" rgba="0.20 0.20 0.22 1.0" specular="0.08" shininess="0.04" />
+  </asset>
+
+  <worldbody>
+    <light name="key" directional="false" castshadow="true" pos="1.2 -1.0 3.5" dir="-0.5 0.4 -1" diffuse="0.85 0.85 0.82" specular="0.35 0.35 0.35" />
+    <light name="fill" directional="true" castshadow="false" pos="-1.5 1.0 2.0" dir="0.6 -0.4 -0.8" diffuse="0.35 0.38 0.42" specular="0.05 0.05 0.05" />
+    <light name="rim" directional="true" castshadow="false" pos="0 2.0 1.0" dir="0 -1 -0.3" diffuse="0.20 0.20 0.25" />
+
+    <geom name="floor" type="plane" size="2 2 0.1" material="m_floor" contype="1" conaffinity="1" />
+
+    <body name="base_link" pos="0 0 0">
+      <geom name="base_plate" type="cylinder" size="0.13 0.018" pos="0 0 0.018" material="m_support" />
+      <geom name="pole_lower" type="cylinder" size="0.05 0.30" pos="0 0 0.32" material="m_support" />
+
+      <body name="trunk_link" pos="0 0 0.2">
+        <joint name="trunk_rotate_joint" type="hinge" axis="0 0 1" range="-180 180" damping="20.0" frictionloss="2.0" armature="0.10" />
+        <geom name="pole_upper" type="cylinder" size="0.05 0.30" pos="0 0 0" material="m_support" />
+        <geom name="shoulder_yoke" type="box" size="0.055 0.22 0.028" pos="0 0 0.485" material="m_support" />
+
+        <body name="l_shoulder_link" pos="0 0.15 0.5">
+          <geom name="l_shoulder_housing" type="sphere" size="0.06" material="m_joint" />
+
+          <body name="l_upper_arm_link" pos="0 0 0">
+            <joint name="l_shoulder_abduct_joint" type="hinge" axis="1 0 0" range="-20 135" damping="12.0" frictionloss="1.5" armature="0.05" />
+            <joint name="l_shoulder_flex_joint" type="hinge" axis="0 1 0" range="-60 150" damping="12.0" frictionloss="1.5" armature="0.05" />
+            <joint name="l_shoulder_rot_joint" type="hinge" axis="0 0 1" range="-90 90" damping="8.0" frictionloss="1.0" armature="0.04" />
+            <geom name="l_upper_arm" type="capsule" fromto="0 0 0  0 0 -0.32" size="0.035" material="m_link" />
+
+            <body name="l_forearm_link" pos="0 0 -0.32">
+              <joint name="l_elbow_flex_joint" type="hinge" axis="0 1 0" range="0 145" damping="6.0" frictionloss="0.8" armature="0.03" />
+              <joint name="l_forearm_rot_joint" type="hinge" axis="0 0 1" range="-180 180" damping="4.0" frictionloss="0.5" armature="0.02" />
+              <geom name="l_elbow_housing" type="sphere" size="0.04" material="m_joint" />
+              <geom name="l_forearm" type="capsule" fromto="0 0 0  0 0 -0.28" size="0.03" material="m_link" />
+
+              <body name="l_wrist_link" pos="0 0 -0.28">
+                <joint name="l_wrist_flex_joint" type="hinge" axis="0 1 0" range="-90 90" damping="2.0" frictionloss="0.2" armature="0.01" />
+                <geom name="l_wrist_housing" type="box" size="0.025 0.025 0.02" material="m_joint" />
+
+                <body name="l_end_effector_link" pos="0 0 0">
+                  <site name="l_ee_tip" type="sphere" size="0.009" pos="0.10 0 0" rgba="1.0 0.4 0.0 1" />
+                  <geom name="l_ee_palm" type="box" size="0.05 0.015 0.015" pos="0.05 0 0" material="m_ee" />
+                </body>
+              </body>
+            </body>
+          </body>
+        </body>
+
+        <body name="r_shoulder_link" pos="0 -0.15 0.5">
+          <geom name="r_shoulder_housing" type="sphere" size="0.06" material="m_joint" />
+
+          <body name="r_upper_arm_link" pos="0 0 0">
+            <joint name="r_shoulder_abduct_joint" type="hinge" axis="-1 0 0" range="-20 135" damping="12.0" frictionloss="1.5" armature="0.05" />
+            <joint name="r_shoulder_flex_joint" type="hinge" axis="0 1 0" range="-60 150" damping="12.0" frictionloss="1.5" armature="0.05" />
+            <joint name="r_shoulder_rot_joint" type="hinge" axis="0 0 1" range="-90 90" damping="8.0" frictionloss="1.0" armature="0.04" />
+            <geom name="r_upper_arm" type="capsule" fromto="0 0 0  0 0 -0.32" size="0.035" material="m_link" />
+
+            <body name="r_forearm_link" pos="0 0 -0.32">
+              <joint name="r_elbow_flex_joint" type="hinge" axis="0 1 0" range="0 145" damping="6.0" frictionloss="0.8" armature="0.03" />
+              <joint name="r_forearm_rot_joint" type="hinge" axis="0 0 1" range="-180 180" damping="4.0" frictionloss="0.5" armature="0.02" />
+              <geom name="r_elbow_housing" type="sphere" size="0.04" material="m_joint" />
+              <geom name="r_forearm" type="capsule" fromto="0 0 0  0 0 -0.28" size="0.03" material="m_link" />
+
+              <body name="r_wrist_link" pos="0 0 -0.28">
+                <joint name="r_wrist_flex_joint" type="hinge" axis="0 1 0" range="-90 90" damping="2.0" frictionloss="0.2" armature="0.01" />
+                <geom name="r_wrist_housing" type="box" size="0.025 0.025 0.02" material="m_joint" />
+
+                <body name="r_end_effector_link" pos="0 0 0">
+                  <site name="r_ee_tip" type="sphere" size="0.009" pos="0.10 0 0" rgba="1.0 0.4 0.0 1" />
+                  <geom name="r_ee_palm" type="box" size="0.05 0.015 0.015" pos="0.05 0 0" material="m_ee" />
+                </body>
+              </body>
+            </body>
+          </body>
+        </body>
+
+      </body>
+    </body>
+
+    <camera name="cam_front" pos="1.8 0 1.15" xyaxes="-1 0 0  0 0 1" fovy="50" />
+    <camera name="cam_top" pos="0 0 2.8" xyaxes="1 0 0  0 1 0" fovy="60" />
+    <camera name="cam_iso" pos="1.4 1.4 1.8" xyaxes="-0.707 0.707 0  -0.408 -0.408 0.816" fovy="45" />
+  </worldbody>
+
+  <actuator>
+    <position name="trunk_rotate_joint" joint="trunk_rotate_joint" kp="1200" ctrlrange="-3.1416 3.1416" forcerange="-200 200" />
+
+    <position name="l_shoulder_abduct_joint" joint="l_shoulder_abduct_joint" kp="800" ctrlrange="-0.349 2.356" forcerange="-120 120" />
+    <position name="l_shoulder_flex_joint" joint="l_shoulder_flex_joint" kp="800" ctrlrange="-1.047 2.618" forcerange="-120 120" />
+    <position name="l_shoulder_rot_joint" joint="l_shoulder_rot_joint" kp="600" ctrlrange="-1.571 1.571" forcerange="-80 80" />
+    <position name="l_elbow_flex_joint" joint="l_elbow_flex_joint" kp="400" ctrlrange="0.000 2.531" forcerange="-60 60" />
+    <position name="l_forearm_rot_joint" joint="l_forearm_rot_joint" kp="300" ctrlrange="-3.142 3.142" forcerange="-40 40" />
+    <position name="l_wrist_flex_joint" joint="l_wrist_flex_joint" kp="200" ctrlrange="-1.571 1.571" forcerange="-20 20" />
+
+    <position name="r_shoulder_abduct_joint" joint="r_shoulder_abduct_joint" kp="800" ctrlrange="-0.349 2.356" forcerange="-120 120" />
+    <position name="r_shoulder_flex_joint" joint="r_shoulder_flex_joint" kp="800" ctrlrange="-1.047 2.618" forcerange="-120 120" />
+    <position name="r_shoulder_rot_joint" joint="r_shoulder_rot_joint" kp="600" ctrlrange="-1.571 1.571" forcerange="-80 80" />
+    <position name="r_elbow_flex_joint" joint="r_elbow_flex_joint" kp="400" ctrlrange="0.000 2.531" forcerange="-60 60" />
+    <position name="r_forearm_rot_joint" joint="r_forearm_rot_joint" kp="300" ctrlrange="-3.142 3.142" forcerange="-40 40" />
+    <position name="r_wrist_flex_joint" joint="r_wrist_flex_joint" kp="200" ctrlrange="-1.571 1.571" forcerange="-20 20" />
+  </actuator>
+
+  <sensor>
+    <framepos  name="l_ee_pos"  objtype="site" objname="l_ee_tip" />
+    <framequat name="l_ee_quat" objtype="site" objname="l_ee_tip" />
+    <framepos  name="r_ee_pos"  objtype="site" objname="r_ee_tip" />
+    <framequat name="r_ee_quat" objtype="site" objname="r_ee_tip" />
+  </sensor>
+
+  <keyframe>
+    <key name="home" qpos="0 0 30 0 90 0 0 0 30 0 90 0 0" />
+  </keyframe>
+
+</mujoco>
